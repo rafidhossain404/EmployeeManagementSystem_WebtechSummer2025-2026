@@ -3,8 +3,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Load dashboard data
   loadDashboardData();
-  loadRecentLeaves();
-  loadRecentPromotions();
+  loadEmployeeOverview();
 
   // Set interval to refresh data every 60 seconds
   setInterval(loadDashboardData, 60000);
@@ -29,125 +28,40 @@ function loadDashboardData() {
     .catch((error) => console.error("Error loading dashboard data:", error));
 }
 
-function loadRecentLeaves() {
-  fetch("hr_leave_requests.php?action=get_pending")
+function loadEmployeeOverview() {
+  fetch("hr_dashboard_data.php?action=get_employees")
     .then((response) => response.json())
     .then((data) => {
-      const tbody = document.getElementById("hrRecent_leaveBody");
-      if (data.success && data.leaves.length > 0) {
-        tbody.innerHTML = data.leaves
+      const tbody = document.getElementById("hrRecent_employeeBody");
+      
+      // Check if data is valid
+      if (!data.success) {
+        tbody.innerHTML = `<tr><td colspan="4" class="hrRecent_empty">Error: ${data.error || 'Unknown error'}</td></tr>`;
+        return;
+      }
+      
+      if (data.employees && data.employees.length > 0) {
+        // Map columns: FirstName, Dept, Role, Status
+        tbody.innerHTML = data.employees
           .map(
-            (leave) => `
+            (emp) => `
                     <tr>
-                        <td>${leave.FirstName} ${leave.LastName}</td>
-                        <td>${leave.Dept || "N/A"}</td>
-                        <td>${formatDate(leave.SD)}</td>
-                        <td>${formatDate(leave.ED)}</td>
-                        <td><span class="hrStatus_badge hrStatus_${leave.Status.toLowerCase()}">${leave.Status}</span></td>
-                        <td>
-                            <button class="hrAction_btn hrAction_btn_approve" onclick="handleLeaveAction('${leave.LeaveID}', 'Accepted')">Approve</button>
-                            <button class="hrAction_btn hrAction_btn_reject" onclick="handleLeaveAction('${leave.LeaveID}', 'Rejected')">Reject</button>
-                            <button class="hrAction_btn hrAction_btn_processing" onclick="handleLeaveAction('${leave.LeaveID}', 'Processing')">Processing</button>
-                        </td>
+                        <td><strong>${emp.FirstName || 'N/A'}</strong></td>
+                        <td>${emp.Dept || 'N/A'}</td>
+                        <td>${emp.Role || 'N/A'}</td>
+                        <td><span class="hrStatus_badge hrStatus_${(emp.Status || 'unknown').toLowerCase()}">${emp.Status || 'Unknown'}</span></td>
                     </tr>
                 `,
           )
           .join("");
       } else {
-        tbody.innerHTML = `<tr><td colspan="6" class="hrRecent_empty">No pending leave requests</td></tr>`;
-      }
-    })
-    .catch((error) => console.error("Error loading leave requests:", error));
-}
-
-function loadRecentPromotions() {
-  fetch("hr_promote.php?action=get_pending")
-    .then((response) => response.json())
-    .then((data) => {
-      const tbody = document.getElementById("hrRecent_promotionBody");
-      if (data.success && data.promotions.length > 0) {
-        tbody.innerHTML = data.promotions
-          .map(
-            (promo) => `
-                    <tr>
-                        <td>${promo.FirstName} ${promo.LastName}</td>
-                        <td>${promo.Dept || "N/A"}</td>
-                        <td>${promo.Role || "N/A"}</td>
-                        <td>${formatDate(promo.PromotionDate)}</td>
-                        <td><span class="hrStatus_badge hrStatus_${promo.Status.toLowerCase()}">${promo.Status}</span></td>
-                        <td>
-                            <button class="hrAction_btn hrAction_btn_approve" onclick="handlePromotionAction('${promo.PromotionID}', 'Approved')">Approve</button>
-                            <button class="hrAction_btn hrAction_btn_reject" onclick="handlePromotionAction('${promo.PromotionID}', 'Rejected')">Reject</button>
-                        </td>
-                    </tr>
-                `,
-          )
-          .join("");
-      } else {
-        tbody.innerHTML = `<tr><td colspan="6" class="hrRecent_empty">No pending promotion requests</td></tr>`;
-      }
-    })
-    .catch((error) =>
-      console.error("Error loading promotion requests:", error),
-    );
-}
-
-function handleLeaveAction(leaveId, action) {
-  if (!confirm(`Are you sure you want to ${action} this leave request?`))
-    return;
-
-  const formData = new FormData();
-  formData.append("leave_id", leaveId);
-  formData.append("action", action);
-
-  fetch("hr_leave_actions.php", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        loadRecentLeaves();
-        loadDashboardData();
-        showNotification(`Leave request ${action} successfully!`, "success");
-      } else {
-        showNotification(data.message || "Error processing request", "error");
+        tbody.innerHTML = `<tr><td colspan="4" class="hrRecent_empty">No employees found (excluding HR)</td></tr>`;
       }
     })
     .catch((error) => {
-      console.error("Error:", error);
-      showNotification("An error occurred", "error");
-    });
-}
-
-function handlePromotionAction(promotionId, action) {
-  if (!confirm(`Are you sure you want to ${action} this promotion request?`))
-    return;
-
-  const formData = new FormData();
-  formData.append("promotion_id", promotionId);
-  formData.append("action", action);
-
-  fetch("hr_promote.php", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        loadRecentPromotions();
-        loadDashboardData();
-        showNotification(
-          `Promotion request ${action} successfully!`,
-          "success",
-        );
-      } else {
-        showNotification(data.message || "Error processing request", "error");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      showNotification("An error occurred", "error");
+      console.error("Error loading employee overview:", error);
+      const tbody = document.getElementById("hrRecent_employeeBody");
+      tbody.innerHTML = `<tr><td colspan="4" class="hrRecent_empty">Error loading data: ${error.message}</td></tr>`;
     });
 }
 
