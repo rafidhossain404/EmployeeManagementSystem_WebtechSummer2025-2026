@@ -1,15 +1,33 @@
 <?php
 require_once 'hr_config.php';
 $conn = getDBConnection();
+$current_user_role = $_SESSION['user_role'] ?? '';
+
 // Handle AJAX requests
 if (isset($_GET['action']) && $_GET['action'] === 'get_pending') {
     header('Content-Type: application/json');
+    $leaves = [];
     
-    $leaves = getPendingLeaveRequests($conn);
-    echo json_encode([
-        'success' => true,
-        'leaves' => $leaves
-    ]);
+    if ($current_user_role === 'Manager') {
+        $sql = "SELECT l.*, u.FirstName, u.LastName, u.Dept 
+                FROM `Leave` l 
+                JOIN User u ON l.UserName = u.UserName 
+                WHERE l.Status = 'Pending'";
+    } elseif ($current_user_role === 'HR') {
+        $sql = "SELECT l.*, u.FirstName, u.LastName, u.Dept 
+                FROM `Leave` l 
+                JOIN User u ON l.UserName = u.UserName 
+                WHERE l.Status = 'Processing'";
+    }
+    
+    if (isset($sql)) {
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $leaves[] = $row;
+        }
+    }
+    
+    echo json_encode(['success' => true, 'leaves' => $leaves]);
     exit();
 }
 ?>
@@ -22,106 +40,32 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_pending') {
     <title>Leave Requests - WorkNest</title>
     <link rel="stylesheet" href="hr_dashboard.css">
     <style>
-        .hrPage_table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        
-        .hrPage_table th {
-            text-align: left;
-            padding: 14px 12px;
-            background: #f8fafc;
-            color: #475569;
-            font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .hrPage_table td {
-            padding: 12px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        
-        .hrPage_table tr:hover td {
-            background: #f8fafc;
-        }
-        
-        .hrPage_filter {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .hrPage_filter select {
-            padding: 10px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .hrPage_filter input {
-            padding: 10px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            flex: 1;
-        }
+        .hrPage_table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .hrPage_table th { text-align: left; padding: 14px 12px; background: #f8fafc; color: #475569; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+        .hrPage_table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        .hrPage_table tr:hover td { background: #f8fafc; }
+        .hrPage_filter { display: flex; gap: 12px; margin-bottom: 20px; }
+        .hrPage_filter select, .hrPage_filter input { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .hrPage_filter input { flex: 1; }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <nav class="hrSidebar">
         <div class="hrSidebar_header">
             <h1 class="hrSidebar_logo">WorkNest</h1>
             <span class="hrSidebar_role">HR Panel</span>
         </div>
-       <ul class="hrSidebar_nav">
-         <li class="hrSidebar_navItem active">
-           <a href="hr_dashboard.html" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">📊</span>
-            Dashboard
-           </a>
-         </li>
-         <li class="hrSidebar_navItem">
-          <a href="hr_update_employee.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">✏️</span>
-            Update Employee
-          </a>
-         </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_recruit.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">➕</span>
-            Recruit Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_promote.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">⬆️</span>
-            Promote Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_terminate.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">🚫</span>
-            Terminate Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_leave_requests.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">📋</span>
-            Leave Requests
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="../logout.php" class="hrSidebar_navLink logout">
-            <span class="hrSidebar_icon">🚪</span>
-            Logout
-        </a>
-    </li>
-   </ul>
+        <ul class="hrSidebar_nav">
+            <li class="hrSidebar_navItem active"><a href="hr_dashboard.html" class="hrSidebar_navLink"><span class="hrSidebar_icon">📊</span>Dashboard</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_update_employee.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">✏️</span>Update Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_recruit.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">➕</span>Recruit Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_promote.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">⬆️</span>Promote Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_terminate.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">🚫</span>Terminate Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_leave_requests.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📋</span>Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="../logout.php" class="hrSidebar_navLink logout"><span class="hrSidebar_icon">🚪</span>Logout</a></li>
+        </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="hrMain">
         <header class="hrHeader">
             <div class="hrHeader_content">
@@ -145,21 +89,20 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_pending') {
             <table class="hrPage_table" id="hrLeave_table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Employee</th>
-                        <th>Department</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>ID</th><th>Employee</th><th>Department</th><th>Start Date</th><th>End Date</th><th>Reason</th><th>Status</th><th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="hrLeave_body">
                     <?php
-                    $leaves = getPendingLeaveRequests($conn);
-                    if (count($leaves) > 0) {
-                        foreach ($leaves as $leave) {
+                    if ($current_user_role === 'Manager') {
+                        $sql = "SELECT l.*, u.FirstName, u.LastName, u.Dept FROM `Leave` l JOIN User u ON l.UserName = u.UserName WHERE l.Status = 'Pending'";
+                    } else {
+                        $sql = "SELECT l.*, u.FirstName, u.LastName, u.Dept FROM `Leave` l JOIN User u ON l.UserName = u.UserName WHERE l.Status = 'Processing'";
+                    }
+                    $result = mysqli_query($conn, $sql);
+                    
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($leave = mysqli_fetch_assoc($result)) {
                             $statusClass = strtolower($leave['Status']);
                             echo "<tr>
                                 <td>{$leave['LeaveID']}</td>
@@ -169,14 +112,20 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_pending') {
                                 <td>{$leave['ED']}</td>
                                 <td>" . substr($leave['Reason'], 0, 50) . "...</td>
                                 <td><span class='hrStatus_badge hrStatus_{$statusClass}'>{$leave['Status']}</span></td>
-                                <td>
-                                    <button class='hrAction_btn hrAction_btn_approve' onclick='handleLeaveAction({$leave['LeaveID']}, \"Accepted\")'>Approve</button>
-                                    <button class='hrAction_btn hrAction_btn_reject' onclick='handleLeaveAction({$leave['LeaveID']}, \"Rejected\")'>Reject</button>
-                                </td>
-                            </tr>";
+                                <td>";
+                            
+                            if ($current_user_role === 'Manager') {
+                                echo "<button class='hrAction_btn hrAction_btn_processing' onclick='handleLeaveAction({$leave['LeaveID']}, \"Processing\")'>✅ Move to Processing</button>";
+                            } else {
+                                echo "<button class='hrAction_btn hrAction_btn_approve' onclick='handleLeaveAction({$leave['LeaveID']}, \"Accepted\")'>Accept</button>
+                                      <button class='hrAction_btn hrAction_btn_reject' onclick='handleLeaveAction({$leave['LeaveID']}, \"Rejected\")'>Reject</button>";
+                            }
+                            
+                            echo "</td></tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='8' class='hrRecent_empty'>No leave requests found</td></tr>";
+                        $emptyMsg = ($current_user_role === 'Manager') ? 'No pending leave requests' : 'No processing leave requests';
+                        echo "<tr><td colspan='8' class='hrRecent_empty'>{$emptyMsg}</td></tr>";
                     }
                     ?>
                 </tbody>
