@@ -1,6 +1,9 @@
 <?php
-$conn = getDBConnection();
 require_once 'hr_config.php';
+
+?>
+<?php
+$conn = getDBConnection();
 ?>
 
 <!DOCTYPE html>

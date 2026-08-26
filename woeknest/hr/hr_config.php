@@ -20,7 +20,7 @@ if ($_SESSION['user_role'] !== 'HR') {
     exit();
 }
 
-// Get HR details from session - THESE ARE DEFINED HERE
+// Get HR details from session
 $hr_user_name = $_SESSION['user_name'] ?? '';
 $hr_first_name = $_SESSION['first_name'] ?? 'HR';
 $hr_last_name = $_SESSION['last_name'] ?? 'User';

@@ -1,9 +1,8 @@
 <?php
-$conn = getDBConnection();
 require_once '../includes/db_connection.php';
 require_once '../includes/session_check.php';
 require_once '../includes/functions.php';
-
+$conn = getDBConnection();
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
