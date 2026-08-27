@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['last_name'] = $user['LastName'] ?? 'User';
                 
                 if ($user['Role'] === 'HR') {
-                    header("Location: hr/hr_dashboard.html");
+                    header("Location: hr/hr_dashboard.php"); // <--- FIXED! Changed from .html to .php
                 } elseif (strpos($user['Role'], 'Manager') !== false) {
                     header("Location: manager/manager_dashboard.html");
                 } else {
@@ -172,9 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <div class="loginDemo">
             <strong>Demo Credentials:</strong><br>
-            HR: hr_hira / hira123<br>
-            Manager: soft_manik / manik123<br>
-            Employee: dev_limon / limon123
+            HR: hira_islam / 12345<br>
+            Manager: manik_roy / 12345<br>
+            Employee: limon_ahmed / 12345
         </div>
     </div>
 </body>

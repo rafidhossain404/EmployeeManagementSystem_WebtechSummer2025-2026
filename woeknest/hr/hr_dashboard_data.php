@@ -110,7 +110,7 @@ if ($current_user_role === 'Manager') {
     $sql = "SELECT COUNT(*) as count FROM Promotion WHERE Status = 'Pending'";
     $result = mysqli_query($conn, $sql);
     if ($row = mysqli_fetch_assoc($result)) $response['pending_promotions'] = (int)$row['count'];
-} else { // For HR
+} else {
     $sql = "SELECT COUNT(*) as count FROM `Leave` WHERE Status = 'Processing'";
     $result = mysqli_query($conn, $sql);
     if ($row = mysqli_fetch_assoc($result)) $response['pending_leaves'] = (int)$row['count'];

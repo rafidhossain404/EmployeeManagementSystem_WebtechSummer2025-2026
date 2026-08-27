@@ -1,9 +1,17 @@
 <?php
-require_once '../includes/db_connection.php';
+// We use session_check.php because it handles the session, but we also need functions and the global DB connection.
 require_once '../includes/session_check.php';
+require_once '../includes/db_connection.php';
 require_once '../includes/functions.php';
-$conn = getDBConnection();
+
+// Use the global connection (do NOT call getDBConnection() again!)
+global $conn;
+$conn = $GLOBALS['conn'];
+
 header('Content-Type: application/json');
+
+// IMPORTANT FIX: Capture role from session directly here
+$current_user_role = $_SESSION['user_role'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
@@ -12,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $leaveId = isset($_POST['leave_id']) ? (int)$_POST['leave_id'] : 0;
 $action = isset($_POST['action']) ? sanitizeInput($_POST['action']) : '';
-$current_user_role = $_SESSION['user_role'] ?? '';
 
 if (empty($leaveId) || empty($action)) {
     echo json_encode(['success' => false, 'message' => 'Missing required parameters']);
@@ -33,7 +40,7 @@ if ($current_user_role === 'Manager') {
     }
     $newStatus = $action;
 } else {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized. Session Role is: ' . $current_user_role]);
     exit();
 }
 

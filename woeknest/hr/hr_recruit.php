@@ -102,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,270 +110,135 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Recruit Employee - WorkNest</title>
     <link rel="stylesheet" href="hr_dashboard.css">
     <style>
-        .hrForm {
-            background: #fff;
-            border-radius: 16px;
-            padding: 24px 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            max-width: 800px;
-        }
-        
-        .hrForm_grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        .hrForm_group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .hrForm_group.full {
-            grid-column: 1 / -1;
-        }
-        
-        .hrForm_label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-        
-        .hrForm_label .required {
-            color: #dc2626;
-        }
-        
-        .hrForm_input {
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.2s ease;
-        }
-        
-        .hrForm_input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .hrForm_input.error {
-            border-color: #dc2626;
-        }
-        
-        .hrForm_message {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .hrForm_message.success {
-            background: #d1fae5;
-            color: #059669;
-        }
-        
-        .hrForm_message.error {
-            background: #fecaca;
-            color: #dc2626;
-        }
-        
-        .hrForm_submit {
-            padding: 12px 32px;
-            background: #667eea;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            grid-column: 1 / -1;
-        }
-        
-        .hrForm_submit:hover {
-            background: #5a6fd6;
-        }
-        
-        @media (max-width: 640px) {
-            .hrForm_grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        .hrForm { background: #fff; border-radius: 16px; padding: 24px 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); max-width: 800px; }
+        .hrForm_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .hrForm_group { display: flex; flex-direction: column; }
+        .hrForm_group.full { grid-column: 1 / -1; }
+        .hrForm_label { font-size: 14px; font-weight: 500; color: #475569; margin-bottom: 6px; }
+        .hrForm_label .required { color: #dc2626; }
+        .hrForm_input { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.2s ease; }
+        .hrForm_input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .hrForm_message { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500; }
+        .hrForm_message.success { background: #d1fae5; color: #059669; }
+        .hrForm_message.error { background: #fecaca; color: #dc2626; }
+        .hrForm_submit { padding: 12px 32px; background: #667eea; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; grid-column: 1 / -1; }
+        .hrForm_submit:hover { background: #5a6fd6; }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <nav class="hrSidebar">
         <div class="hrSidebar_header">
             <h1 class="hrSidebar_logo">WorkNest</h1>
             <span class="hrSidebar_role">HR Panel</span>
         </div>
-       <ul class="hrSidebar_nav">
-    <li class="hrSidebar_navItem active">
-        <a href="hr_dashboard.html" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">📊</span>
-            Dashboard
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_update_employee.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">✏️</span>
-            Update Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_recruit.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">➕</span>
-            Recruit Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_promote.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">⬆️</span>
-            Promote Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_terminate.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">🚫</span>
-            Terminate Employee
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="hr_leave_requests.php" class="hrSidebar_navLink">
-            <span class="hrSidebar_icon">📋</span>
-            Leave Requests
-        </a>
-    </li>
-    <li class="hrSidebar_navItem">
-        <a href="../logout.php" class="hrSidebar_navLink logout">
-            <span class="hrSidebar_icon">🚪</span>
-            Logout
-        </a>
-    </li>
-</ul>
+         <ul class="hrSidebar_nav">
+            <li class="hrSidebar_navItem"><a href="hr_dashboard.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📊</span>Dashboard</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_update_employee.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">✏️</span>Update Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_recruit.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">➕</span>Recruit Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_promote.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">⬆️</span>Promote Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_terminate.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">🚫</span>Terminate Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_leave_requests.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📋</span>Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="../logout.php" class="hrSidebar_navLink logout"><span class="hrSidebar_icon">🚪</span>Logout</a></li>
+        </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="hrMain">
         <header class="hrHeader">
-            <div class="hrHeader_content">
-                <h1 class="hrHeader_title">Recruit Employee</h1>
-                <p class="hrHeader_subtitle">Add a new employee to the system</p>
-            </div>
+            <h1 class="hrHeader_title">Recruit Employee</h1>
+            <p class="hrHeader_subtitle">Add a new employee to the system</p>
         </header>
 
         <div class="hrForm">
             <?php if ($message): ?>
-                <div class="hrForm_message <?php echo $messageType; ?>">
-                    <?php echo $message; ?>
-                </div>
+                <div class="hrForm_message <?php echo $messageType; ?>"><?php echo $message; ?></div>
             <?php endif; ?>
 
             <form method="POST" action="">
                 <div class="hrForm_grid">
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_userName">Username <span class="required">*</span></label>
-                        <input type="text" id="hr_userName" name="hr_userName" class="hrForm_input" value="<?php echo $_POST['hr_userName'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Username <span class="required">*</span></label>
+                        <input type="text" name="hr_userName" class="hrForm_input" value="<?php echo $_POST['hr_userName'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_password">Password <span class="required">*</span></label>
-                        <input type="password" id="hr_password" name="hr_password" class="hrForm_input" required>
+                        <label class="hrForm_label">Password <span class="required">*</span></label>
+                        <input type="password" name="hr_password" class="hrForm_input" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_firstName">First Name <span class="required">*</span></label>
-                        <input type="text" id="hr_firstName" name="hr_firstName" class="hrForm_input" value="<?php echo $_POST['hr_firstName'] ?? ''; ?>" required>
+                        <label class="hrForm_label">First Name <span class="required">*</span></label>
+                        <input type="text" name="hr_firstName" class="hrForm_input" value="<?php echo $_POST['hr_firstName'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_lastName">Last Name <span class="required">*</span></label>
-                        <input type="text" id="hr_lastName" name="hr_lastName" class="hrForm_input" value="<?php echo $_POST['hr_lastName'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Last Name <span class="required">*</span></label>
+                        <input type="text" name="hr_lastName" class="hrForm_input" value="<?php echo $_POST['hr_lastName'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_dob">Date of Birth <span class="required">*</span></label>
-                        <input type="date" id="hr_dob" name="hr_dob" class="hrForm_input" value="<?php echo $_POST['hr_dob'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Date of Birth <span class="required">*</span></label>
+                        <input type="date" name="hr_dob" class="hrForm_input" value="<?php echo $_POST['hr_dob'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_gender">Gender <span class="required">*</span></label>
-                        <select id="hr_gender" name="hr_gender" class="hrForm_input" required>
-                            <option value="">Select Gender</option>
-                            <option value="Male" <?php echo (isset($_POST['hr_gender']) && $_POST['hr_gender'] === 'Male') ? 'selected' : ''; ?>>Male</option>
-                            <option value="Female" <?php echo (isset($_POST['hr_gender']) && $_POST['hr_gender'] === 'Female') ? 'selected' : ''; ?>>Female</option>
-                            <option value="Other" <?php echo (isset($_POST['hr_gender']) && $_POST['hr_gender'] === 'Other') ? 'selected' : ''; ?>>Other</option>
+                        <label class="hrForm_label">Gender <span class="required">*</span></label>
+                        <select name="hr_gender" class="hrForm_input" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_email">Email <span class="required">*</span></label>
-                        <input type="email" id="hr_email" name="hr_email" class="hrForm_input" value="<?php echo $_POST['hr_email'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Email <span class="required">*</span></label>
+                        <input type="email" name="hr_email" class="hrForm_input" value="<?php echo $_POST['hr_email'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_phone">Phone <span class="required">*</span></label>
-                        <input type="tel" id="hr_phone" name="hr_phone" class="hrForm_input" value="<?php echo $_POST['hr_phone'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Phone <span class="required">*</span></label>
+                        <input type="tel" name="hr_phone" class="hrForm_input" value="<?php echo $_POST['hr_phone'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group full">
-                        <label class="hrForm_label" for="hr_address">Address <span class="required">*</span></label>
-                        <input type="text" id="hr_address" name="hr_address" class="hrForm_input" value="<?php echo $_POST['hr_address'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Address <span class="required">*</span></label>
+                        <input type="text" name="hr_address" class="hrForm_input" value="<?php echo $_POST['hr_address'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_role">Role <span class="required">*</span></label>
-                        <select id="hr_role" name="hr_role" class="hrForm_input" required>
+                        <label class="hrForm_label">Role <span class="required">*</span></label>
+                        <select name="hr_role" class="hrForm_input" required>
                             <option value="">Select Role</option>
-                            <option value="Software_Developer" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Software_Developer') ? 'selected' : ''; ?>>Software Developer</option>
-                            <option value="Software_Designer" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Software_Designer') ? 'selected' : ''; ?>>Software Designer</option>
-                            <option value="Software_Tester" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Software_Tester') ? 'selected' : ''; ?>>Software Tester</option>
-                            <option value="Salesman" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Salesman') ? 'selected' : ''; ?>>Salesman</option>
-                            <option value="Digital_Marketing_Specialist" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Digital_Marketing_Specialist') ? 'selected' : ''; ?>>Digital Marketing Specialist</option>
-                            <option value="Content_Marketing_Specialist" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Content_Marketing_Specialist') ? 'selected' : ''; ?>>Content Marketing Specialist</option>
-                            <option value="PR_Officer" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'PR_Officer') ? 'selected' : ''; ?>>PR Officer</option>
-                            <option value="Driver" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Driver') ? 'selected' : ''; ?>>Driver</option>
-                            <option value="Cleaner" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Cleaner') ? 'selected' : ''; ?>>Cleaner</option>
-                            <option value="Watchman" <?php echo (isset($_POST['hr_role']) && $_POST['hr_role'] === 'Watchman') ? 'selected' : ''; ?>>Watchman</option>
+                            <option value="Software_Developer">Software Developer</option>
+                            <option value="Software_Designer">Software Designer</option>
+                            <option value="Software_Tester">Software Tester</option>
+                            <option value="Salesman">Salesman</option>
+                            <option value="Digital_Marketing_Specialist">Digital Marketing Specialist</option>
+                            <option value="Content_Marketing_Specialist">Content Marketing Specialist</option>
+                            <option value="PR_Officer">PR Officer</option>
+                            <option value="Driver">Driver</option>
+                            <option value="Cleaner">Cleaner</option>
+                            <option value="Watchman">Watchman</option>
                         </select>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_dept">Department <span class="required">*</span></label>
-                        <select id="hr_dept" name="hr_dept" class="hrForm_input" required>
+                        <label class="hrForm_label">Department <span class="required">*</span></label>
+                        <select name="hr_dept" class="hrForm_input" required>
                             <option value="">Select Department</option>
-                            <option value="Software" <?php echo (isset($_POST['hr_dept']) && $_POST['hr_dept'] === 'Software') ? 'selected' : ''; ?>>Software</option>
-                            <option value="Marketing" <?php echo (isset($_POST['hr_dept']) && $_POST['hr_dept'] === 'Marketing') ? 'selected' : ''; ?>>Marketing</option>
-                            <option value="Facilities" <?php echo (isset($_POST['hr_dept']) && $_POST['hr_dept'] === 'Facilities') ? 'selected' : ''; ?>>Facilities</option>
-                            <option value="HR" <?php echo (isset($_POST['hr_dept']) && $_POST['hr_dept'] === 'HR') ? 'selected' : ''; ?>>HR</option>
+                            <option value="Software">Software</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Facilities">Facilities</option>
+                            <option value="HR">HR</option>
                         </select>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_salary">Salary <span class="required">*</span></label>
-                        <input type="number" step="0.01" id="hr_salary" name="hr_salary" class="hrForm_input" value="<?php echo $_POST['hr_salary'] ?? ''; ?>" required>
+                        <label class="hrForm_label">Salary <span class="required">*</span></label>
+                        <input type="number" step="0.01" name="hr_salary" class="hrForm_input" value="<?php echo $_POST['hr_salary'] ?? ''; ?>" required>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_managerId">Manager</label>
-                        <select id="hr_managerId" name="hr_managerId" class="hrForm_input">
+                        <label class="hrForm_label">Manager</label>
+                        <select name="hr_managerId" class="hrForm_input">
                             <option value="">Select Manager (Optional)</option>
                             <?php foreach ($managers as $manager): ?>
-                                <option value="<?php echo $manager['ManagerID']; ?>" <?php echo (isset($_POST['hr_managerId']) && $_POST['hr_managerId'] == $manager['ManagerID']) ? 'selected' : ''; ?>>
-                                    <?php echo $manager['FirstName'] . ' ' . $manager['LastName'] . ' (' . $manager['UserName'] . ')'; ?>
-                                </option>
+                                <option value="<?php echo $manager['ManagerID']; ?>"><?php echo $manager['FirstName'] . ' ' . $manager['LastName']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-
                     <div class="hrForm_group">
-                        <label class="hrForm_label" for="hr_joinDate">Join Date</label>
-                        <input type="date" id="hr_joinDate" name="hr_joinDate" class="hrForm_input" value="<?php echo $_POST['hr_joinDate'] ?? date('Y-m-d'); ?>">
+                        <label class="hrForm_label">Join Date</label>
+                        <input type="date" name="hr_joinDate" class="hrForm_input" value="<?php echo date('Y-m-d'); ?>">
                     </div>
-
                     <button type="submit" class="hrForm_submit">Recruit Employee</button>
                 </div>
             </form>

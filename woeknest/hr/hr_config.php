@@ -28,7 +28,7 @@ $hr_last_name = $_SESSION['last_name'] ?? 'User';
 // Set page title
 $page_title = "HR Dashboard - WorkNest";
 
-// Make sure $conn is available globally
+// Make sure $conn is available globally (Prevents calling getDBConnection() twice)
 global $conn;
-$conn = getDBConnection();
+$conn = $GLOBALS['conn'];
 ?>
