@@ -247,19 +247,31 @@ $availableRoles = [
                                     <?php if ($current_user_role === 'Manager'): ?>
                                         <button type="submit" name="hr_action" value="Processing" class="hrAction_btn hrAction_btn_processing">✅ Move to Processing</button>
                                     <?php else: ?>
-                                        <label style="font-size: 13px; color: #475569; font-weight: 500;">New Role:</label>
-                                        <select name="hr_newRole" required>
-                                            <option value="">Select Role...</option>
-                                            <?php foreach ($availableRoles as $key => $label): ?>
-                                                <option value="<?php echo $key; ?>"><?php echo $label; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
+                                        <!-- START APPROVE FORM -->
+                                        <div id="hrPromote_fields_<?php echo $promotion['PromotionID']; ?>" style="display: none; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                            <label style="font-size: 13px; color: #475569; font-weight: 500;">New Role:</label>
+                                            <select name="hr_newRole" id="hrRole_<?php echo $promotion['PromotionID']; ?>">
+                                                <option value="">Select Role...</option>
+                                                <?php foreach ($availableRoles as $key => $label): ?>
+                                                    <option value="<?php echo $key; ?>"><?php echo $label; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            
+                                            <label style="font-size: 13px; color: #475569; font-weight: 500;">New Salary:</label>
+                                            <input type="number" step="0.01" name="hr_newSalary" placeholder="Optional" min="0">
+                                            
+                                            <!-- THE ACTUAL APPROVE BUTTON -->
+                                            <button type="submit" name="hr_action" value="Approved" class="hrAction_btn hrAction_btn_approve"> Approve</button>
+                                            
+                                            <!-- CANCEL BUTTON -->
+                                            <button type="button" onclick="cancelPromo(<?php echo $promotion['PromotionID']; ?>)" class="hrAction_btn hrAction_btn_processing"> Cancel</button>
+                                        </div>
                                         
-                                        <label style="font-size: 13px; color: #475569; font-weight: 500;">New Salary:</label>
-                                        <input type="number" step="0.01" name="hr_newSalary" placeholder="Optional" min="0">
-                                        
-                                        <button type="submit" name="hr_action" value="Approved" class="hrAction_btn hrAction_btn_approve">✅ Approve</button>
-                                        <button type="submit" name="hr_action" value="Rejected" class="hrAction_btn hrAction_btn_reject">❌ Reject</button>
+                                        <!-- OUTER BUTTONS (Hidden when form is open) -->
+                                        <div id="hrOuterBtns_<?php echo $promotion['PromotionID']; ?>">
+                                            <button type="button" onclick="openPromo(<?php echo $promotion['PromotionID']; ?>)" class="hrAction_btn hrAction_btn_approve"> Approve</button>
+                                            <button type="submit" name="hr_action" value="Rejected" class="hrAction_btn hrAction_btn_reject"> Reject</button>
+                                        </div>
                                     <?php endif; ?>
                                 </div>
                             </form>
@@ -321,6 +333,20 @@ $availableRoles = [
     </main>
 
     <script>
+        // Open the Approve form (Hides outer buttons, shows inner form)
+        function openPromo(id) {
+            document.getElementById('hrPromote_fields_' + id).style.display = 'flex';
+            document.getElementById('hrOuterBtns_' + id).style.display = 'none';
+            document.getElementById('hrRole_' + id).required = true;
+        }
+
+        // Close the Approve form (Shows outer buttons again)
+        function cancelPromo(id) {
+            document.getElementById('hrPromote_fields_' + id).style.display = 'none';
+            document.getElementById('hrOuterBtns_' + id).style.display = 'flex';
+            document.getElementById('hrRole_' + id).required = false;
+        }
+
         function confirmPromotion(event) {
             const form = event.target;
             const action = form.querySelector('button[type="submit"][clicked]');
@@ -328,7 +354,7 @@ $availableRoles = [
             
             const actionValue = action.value;
             const role = form.querySelector('select[name="hr_newRole"]');
-            
+
             if (actionValue === 'Approved' && role && !role.value) {
                 alert('Please select a new role for the promotion.');
                 return false;
@@ -341,6 +367,7 @@ $availableRoles = [
             return confirm(message);
         }
 
+        // Track which button was clicked
         document.querySelectorAll('.hrPromote_itemActions button[type="submit"]').forEach(btn => {
             btn.addEventListener('click', function() {
                 const form = this.closest('form');
