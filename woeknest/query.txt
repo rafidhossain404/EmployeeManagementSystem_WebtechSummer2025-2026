@@ -54,6 +54,19 @@ CREATE TABLE `Promotion` (
     FOREIGN KEY (`EmployeeID`) REFERENCES `Employee`(`EmployeeID`) ON DELETE CASCADE
 );
 
+-- NEW TABLE NEEDED FOR MANAGER ASSIGNING TASKS:
+CREATE TABLE `Task` (
+    `TaskID` INT AUTO_INCREMENT PRIMARY KEY,
+    `ManagerID` INT NOT NULL,
+    `EmployeeID` INT NOT NULL,
+    `Title` VARCHAR(100) NOT NULL,
+    `Description` TEXT NOT NULL,
+    `T_Status` VARCHAR(20) DEFAULT 'Pending',
+    `AssignedDate` DATE NOT NULL,
+    `DueDate` DATE NOT NULL,
+    FOREIGN KEY (`ManagerID`) REFERENCES `Manager`(`ManagerID`) ON DELETE CASCADE,
+    FOREIGN KEY (`EmployeeID`) REFERENCES `Employee`(`EmployeeID`) ON DELETE CASCADE
+);
 INSERT INTO `User` (`UserName`, `Password`, `Role`, `Dept`, `Salary`, `FirstName`, `LastName`, `DOB`, `Gender`, `Email`, `Phone`, `Address`, `JoinDate`, `Status`) VALUES
 ('hira_islam', '12345', 'HR', 'HR', 65000.00, 'Hira', 'Islam', '1992-03-15', 'Female', 'hira.islam@worknest.com', '01712345601', 'Dhanmondi, Dhaka', '2020-01-10', 'Active'),
 ('izar_rahman', '12345', 'Software_Developer', 'Software', 55000.00, 'Izar', 'Rahman', '1996-07-22', 'Male', 'izar.rahman@worknest.com', '01712345602', 'Banani, Dhaka', '2021-06-15', 'On_leave'),
@@ -84,17 +97,4 @@ INSERT INTO `Leave` (`UserName`, `SD`, `ED`, `Reason`, `Status`) VALUES
 INSERT INTO `Promotion` (`EmployeeID`, `PromotionDate`, `Status`) VALUES 
 (2, '2026-08-20', 'Pending'),    
 (1, '2026-07-15', 'Processing'),   
-(4, '2026-06-10', 'Rejected');   
-
-SELECT 
-    p.PromotionID, 
-    u.FirstName, 
-    u.LastName, 
-    u.Dept, 
-    u.Role AS CurrentRole, 
-    p.PromotionDate, 
-    p.Status
-FROM Promotion p
-JOIN Employee e ON p.EmployeeID = e.EmployeeID
-JOIN User u ON e.UserName = u.UserName;
-```
+(4, '2026-06-10', 'Rejected');
