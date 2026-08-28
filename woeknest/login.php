@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = "Please enter username and password";
     } else {
-        // FIXED: Changed [User] to User (MySQL syntax)
         $sql = "SELECT * FROM User WHERE UserName = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "s", $username);
@@ -21,17 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = mysqli_stmt_get_result($stmt);
         
         if ($user = mysqli_fetch_assoc($result)) {
-            // Verify password (plain text for demo)
             if ($password === $user['Password']) {
                 $_SESSION['user_name'] = $user['UserName'];
                 $_SESSION['user_role'] = $user['Role'];
-                $_SESSION['first_name'] = $user['FirstName'] ?? 'HR';
-                $_SESSION['last_name'] = $user['LastName'] ?? 'User';
+                $_SESSION['first_name'] = $user['FirstName'] ?? 'User';
+                $_SESSION['last_name'] = $user['LastName'] ?? '';
                 
                 if ($user['Role'] === 'HR') {
-                    header("Location: hr/hr_dashboard.php"); // <--- FIXED! Changed from .html to .php
+                    header("Location: hr/hr_dashboard.php");
                 } elseif (strpos($user['Role'], 'Manager') !== false) {
-                    header("Location: manager/manager_dashboard.html");
+                    header("Location: manager/manager_dashboard.php");
+                    exit();
                 } else {
                     header("Location: employee/employee_dashboard.html");
                 }
