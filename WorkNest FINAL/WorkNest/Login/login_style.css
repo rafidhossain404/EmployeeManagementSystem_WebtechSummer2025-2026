@@ -1,0 +1,367 @@
+/* =====================================================================
+   COLOR VARIABLES
+   Defining colors once here means we can reuse them everywhere below
+   with var(--name) instead of retyping the color code each time.
+===================================================================== */
+:root{
+  --navy:#12122b;      /* dark background color for the left panel */
+  --purple-1:#a78bfa;  /* gradient text color 1 */
+  --purple-2:#c9b6ff;  /* gradient text color 2 */
+  --green:#4ade80;     /* small "online" style dot */
+  --ink:#111116;       /* main text color */
+  --gray-500:#6b7280;  /* muted/secondary text color */
+  --gray-100:#f3f4f6;  /* light border color */
+  --blue:#5b5bf0;      /* link + focus + button accent color */
+}
+
+/* Makes width/height calculations include padding and border,
+   which makes sizing elements much more predictable. */
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color:var(--ink);
+}
+
+/* The wrapper lays the left panel and right panel side by side.
+   "flex-wrap: wrap" lets them stack on small screens. */
+.wrapper{
+  min-height:100vh;
+  display:flex;
+  flex-wrap:wrap;
+}
+
+
+/* =====================================================================
+   LEFT PANEL — dark branding / marketing side
+===================================================================== */
+.panel-left{
+  position:relative;
+  flex:1 1 480px;
+  min-height:100vh;
+  background:var(--navy);
+  overflow:hidden;
+  padding:40px 56px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* Faint grid-line background pattern, faded out toward the edges */
+.grid-bg{
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size:60px 60px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 30% 20%, black 30%, transparent 85%);
+          mask-image: radial-gradient(ellipse 90% 80% at 30% 20%, black 30%, transparent 85%);
+}
+
+/* Soft purple glow in the top-left corner of the left panel */
+.panel-left::after{
+  content:"";
+  position:absolute;
+  left:-10%;
+  top:-10%;
+  width:60%;
+  height:50%;
+  background:radial-gradient(circle, rgba(124,108,224,0.28), transparent 70%);
+  pointer-events:none;
+}
+
+/* Logo + brand name row */
+.brand{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo{
+  width:46px;
+  height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  border-radius:10px;
+}
+
+.brand-name{
+  color:#fff;
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:0.2px;
+}
+
+/* Marketing text block (badge, heading, paragraph) */
+.left-content{
+  position:relative;
+  z-index:2;
+  max-width:460px;
+}
+
+/* Small rounded "pill" badge with a glowing green dot */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.10);
+  color:#d8d8e6;
+  font-size:12.5px;
+  font-weight:500;
+  padding:7px 14px;
+  border-radius:999px;
+  margin-bottom:26px;
+}
+
+.badge .dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 8px var(--green);
+}
+
+.left-content h1{
+  color:#fff;
+  font-size:44px;
+  line-height:1.12;
+  font-weight:800;
+  margin:0 0 18px 0;
+  letter-spacing:-0.5px;
+}
+
+/* The purple gradient text effect used on part of the heading */
+.left-content h1 .grad{
+  background:linear-gradient(90deg, var(--purple-1), var(--purple-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.left-content p{
+  color:#9d9db0;
+  font-size:15px;
+  line-height:1.6;
+  margin:0;
+}
+
+
+/* =====================================================================
+   RIGHT PANEL — the white sign-in form side
+===================================================================== */
+.panel-right{
+  flex:1 1 420px;
+  min-height:100vh;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 24px;
+}
+
+.form-container{
+  width:100%;
+  max-width:390px;
+}
+
+.form-container h2{
+  font-size:27px;
+  font-weight:800;
+  margin:0 0 6px 0;
+}
+
+.subtext{
+  color:var(--gray-500);
+  font-size:14.5px;
+  margin:0 0 24px 0;
+}
+
+/* Field labels, e.g. "USER ID" */
+label{
+  display:block;
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:0.6px;
+  color:#374151;
+  margin-bottom:8px;
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+/* All text-style inputs share the same look */
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"]{
+  width:100%;
+  padding:13px 15px;
+  border-radius:10px;
+  border:1.5px solid var(--gray-100);
+  background:#f8f9fb;
+  font-size:14.5px;
+  outline:none;
+  transition:border-color .15s ease, background .15s ease;
+}
+
+/* Highlight the input border when the user clicks into it */
+input:focus{
+  border-color:var(--blue);
+  background:#fff;
+}
+
+/* Red styling applied by JS when a field fails validation */
+input.invalid{
+  border-color:#dc2626;
+  background:#fef2f2;
+}
+
+/* Red error text under an invalid field (hidden by default) */
+.field-error{
+  color:#dc2626;
+  font-size:12px;
+  margin-top:6px;
+  display:none;
+}
+
+.field-error.show{
+  display:block;
+}
+
+/* Row that holds the "PASSWORD" label and the "Forgot password?" link side by side */
+.label-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.label-row a{
+  font-size:12.5px;
+  color:var(--blue);
+  text-decoration:none;
+  font-weight:600;
+}
+
+.label-row a:hover{
+  text-decoration:underline;
+}
+
+/* Wraps the password input so the eye icon can sit on top of it */
+.password-wrap{
+  position:relative;
+}
+
+.password-wrap input{
+  padding-right:44px; /* leave room for the eye icon */
+}
+
+/* Eye icon button used to show/hide the password */
+.eye-toggle{
+  position:absolute;
+  right:6px; top:50%;
+  transform:translateY(-50%);
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:8px;
+  color:#9ca3af;
+  display:flex;
+}
+
+/* Main submit button (Sign in / Verify identity / Reset password) */
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  background:var(--navy);
+  color:#fff;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:6px;
+  transition:opacity .15s ease, transform .05s ease;
+}
+
+.btn:hover{
+  opacity:0.9;
+}
+
+.btn:active{
+  transform:scale(0.99); /* subtle "press" effect when clicked */
+}
+
+/* Success/error banner shown near the top of the form */
+.msg{
+  font-size:13px;
+  margin:0 0 16px 0;
+  padding:10px 12px;
+  border-radius:8px;
+}
+
+.msg.error{
+  color:#991b1b;
+  background:#fef2f2;
+  border:1px solid #fecaca;
+}
+
+.msg.success{
+  color:#166534;
+  background:#f0fdf4;
+  border:1px solid #bbf7d0;
+}
+
+/* "‹ Back to sign in" link used on the forgot/reset pages */
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  color:var(--gray-500);
+  text-decoration:none;
+  font-size:13.5px;
+  margin-bottom:22px;
+}
+
+.back-link:hover{
+  color:var(--ink);
+}
+
+/* Text under the form, e.g. "Remember your password? Sign in" */
+.footer-text{
+  text-align:center;
+  color:var(--gray-500);
+  font-size:13.5px;
+  margin-top:22px;
+}
+
+.footer-text a{
+  color:var(--blue);
+  text-decoration:none;
+  font-weight:600;
+}
+
+.footer-text a:hover{
+  text-decoration:underline;
+}
+
+
+/* =====================================================================
+   RESPONSIVE: stack the two panels on smaller screens
+===================================================================== */
+@media (max-width:900px){
+  .panel-left{ min-height:auto; padding:32px 28px; }
+  .panel-right{ min-height:auto; padding:40px 24px 60px; }
+  .left-content h1{ font-size:34px; }
+}

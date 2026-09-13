@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorkNest Reset Password</title>
+<link rel="stylesheet" href="reset_style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- ================= LEFT SIDE: same dark brand panel as other pages ================= -->
+  <div class="panel-left">
+    <div class="grid-bg"></div>
+
+    <div class="brand">
+      <div class="logo">
+        <img src="logo.png" alt="WorkNest logo">
+      </div>
+      <span class="brand-name">WorkNest</span>
+    </div>
+
+    <div class="left-content">
+      <div class="badge"><span class="dot"></span>Real-Time Workforce Analytics</div>
+      <h1>Manage your<br><span class="grad">people, smarter.</span></h1>
+      <p>WorkNest brings HR, managers, and employees into one unified workspace — simplifying workforce management, all in one place.</p>
+    </div>
+
+    <div></div>
+  </div>
+
+  <!-- ================= RIGHT SIDE: set a new password ================= -->
+  <div class="panel-right">
+    <div class="form-container">
+      <a href="login_index.html" class="back-link">&#8249; Back to sign in</a>
+      <h2>Reset your password</h2>
+      <!-- reset_script.js fills this in with the verified user's ID -->
+      <p class="subtext" id="subtext">Choose a new password for your account.</p>
+
+      <div class="msg" id="topMsg" style="display:none;"></div>
+
+      <form id="resetForm" novalidate>
+        <!-- New password field, with a show/hide eye button -->
+        <div class="field">
+          <label for="newPassword">NEW PASSWORD</label>
+          <div class="password-wrap">
+            <input type="password" id="newPassword" placeholder="At least 8 characters" autocomplete="new-password">
+            <button type="button" class="eye-toggle" id="eyeToggle1" aria-label="Toggle password visibility">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="field-error" id="newPasswordError"></div>
+        </div>
+
+        <!-- Confirm password field, also with its own eye button -->
+        <div class="field">
+          <label for="confirmPassword">CONFIRM PASSWORD</label>
+          <div class="password-wrap">
+            <input type="password" id="confirmPassword" placeholder="Re-enter new password" autocomplete="new-password">
+            <button type="button" class="eye-toggle" id="eyeToggle2" aria-label="Toggle password visibility">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="field-error" id="confirmPasswordError"></div>
+        </div>
+
+        <button type="submit" class="btn">Reset password</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<!-- Checks the new password and saves it (only reachable after identity is verified) -->
+<script src="reset_script.js"></script>
+</body>
+</html>

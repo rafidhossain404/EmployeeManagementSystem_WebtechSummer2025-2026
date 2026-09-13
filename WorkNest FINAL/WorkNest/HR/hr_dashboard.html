@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Dashboard - WorkNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="hr_dashboard.css">
+</head>
+<body>
+    <nav class="hrSidebar">
+        <div class="hrSidebar_header">
+            <div class="hrSidebar_brandMark">W</div>
+            <div class="hrSidebar_brandText">
+                <span class="hrSidebar_logo">WorkNest</span>
+                <span class="hrSidebar_role">HR Panel</span>
+            </div>
+        </div>
+        <ul class="hrSidebar_nav">
+            <li class="hrSidebar_navItem active"><a href="hr_dashboard.html" class="hrSidebar_navLink">Dashboard</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_update_employee.html" class="hrSidebar_navLink">Update Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_recruit.html" class="hrSidebar_navLink">Recruit Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_promote.html" class="hrSidebar_navLink">Promote Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_terminate.html" class="hrSidebar_navLink">Terminate Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_leave_requests.html" class="hrSidebar_navLink">Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="../Login/login_index.html" class="hrSidebar_navLink logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="hrMain">
+        <header class="hrHeader">
+            <div class="hrHeader_content">
+                <h1 class="hrHeader_title">Dashboard</h1>
+                <p class="hrHeader_subtitle">Welcome back, <span id="hrName_display">HR User</span></p>
+            </div>
+            <div class="hrHeader_actions">
+                <div class="hrHeader_who">
+                    <div class="hrHeader_profile" id="hrName_short">HR</div>
+                    <div class="hrHeader_whoText">
+                        <strong id="hrName_full">HR User</strong>
+                        <span>HR Manager</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hrStats">
+            <div class="hrStats_card">
+                <div class="hrStats_cardIcon"></div>
+                <div class="hrStats_cardContent">
+                    <h3 class="hrStats_cardNumber" id="hrStats_totalEmployees">0</h3>
+                    <p class="hrStats_cardLabel">Total Employees</p>
+                </div>
+            </div>
+            <div class="hrStats_card">
+                <div class="hrStats_cardIcon"></div>
+                <div class="hrStats_cardContent">
+                    <h3 class="hrStats_cardNumber" id="hrStats_pendingLeaves">0</h3>
+                    <p class="hrStats_cardLabel">Pending Leaves</p>
+                </div>
+            </div>
+            <div class="hrStats_card">
+                <div class="hrStats_cardIcon"></div>
+                <div class="hrStats_cardContent">
+                    <h3 class="hrStats_cardNumber" id="hrStats_pendingPromotions">0</h3>
+                    <p class="hrStats_cardLabel">Pending Promotions</p>
+                </div>
+            </div>
+            <div class="hrStats_card">
+                <div class="hrStats_cardIcon"></div>
+                <div class="hrStats_cardContent">
+                    <h3 class="hrStats_cardNumber" id="hrStats_activeEmployees">0</h3>
+                    <p class="hrStats_cardLabel">Active Employees</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="hrTableContainer">
+            <h2 class="hrTableTitle">Employee Overview</h2>
+            <div class="hrTableScroll">
+                <table class="hrEmployeeTable" id="hrRecent_employeeTable">
+                    <thead>
+                        <tr><th>First Name</th><th>Department</th><th>Role</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="hrRecent_employeeBody">
+                        <tr><td colspan="4" class="hrEmptyState">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="mock-data.js"></script>
+    <script src="hr_dashboard.js"></script>
+</body>
+</html>

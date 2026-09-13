@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminate Employee - WorkNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="hr_dashboard.css">
+    <link rel="stylesheet" href="hr_terminate.css">
+</head>
+<body>
+    <nav class="hrSidebar">
+        <div class="hrSidebar_header">
+            <div class="hrSidebar_brandMark">W</div>
+            <div class="hrSidebar_brandText">
+                <span class="hrSidebar_logo">WorkNest</span>
+                <span class="hrSidebar_role">HR Panel</span>
+            </div>
+        </div>
+        <ul class="hrSidebar_nav">
+            <li class="hrSidebar_navItem"><a href="hr_dashboard.html" class="hrSidebar_navLink">Dashboard</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_update_employee.html" class="hrSidebar_navLink">Update Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_recruit.html" class="hrSidebar_navLink">Recruit Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_promote.html" class="hrSidebar_navLink">Promote Employee</a></li>
+            <li class="hrSidebar_navItem active"><a href="hr_terminate.html" class="hrSidebar_navLink">Terminate Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_leave_requests.html" class="hrSidebar_navLink">Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="../Login/login_index.html" class="hrSidebar_navLink logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="hrMain">
+        <header class="hrHeader">
+            <div class="hrHeader_content">
+                <h1 class="hrHeader_title">Terminate Employee</h1>
+                <p class="hrHeader_subtitle">Search and terminate an employee</p>
+            </div>
+            <div class="hrHeader_actions">
+                <div class="hrHeader_who">
+                    <div class="hrHeader_profile">AR</div>
+                    <div class="hrHeader_whoText">
+                        <strong>Ayesha Rahman</strong>
+                        <span>HR Manager</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div id="hrForm_messageBox" style="max-width: 800px;"></div>
+
+        <div class="hrTerminate_container">
+            <div class="hrTerminate_card">
+                <h3 style="margin-bottom: 16px;">Select Employee</h3>
+                <select id="hrEmployee_select" class="hrTerminate_select" onchange="onEmployeeSelect()">
+                    <option value="">Select an employee...</option>
+                </select>
+                <p id="hrNoEmployees_msg" style="color: #8890a0; display: none;">No active employees found to terminate.</p>
+            </div>
+
+            <div class="hrTerminate_card">
+                <h3 style="margin-bottom: 16px;">Employee Details</h3>
+                <div id="hrEmployee_details">
+                    <p style="color: #8890a0;">Select an employee from the list to view details.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="mock-data.js"></script>
+    <script src="hr_terminate.js"></script>
+</body>
+</html>

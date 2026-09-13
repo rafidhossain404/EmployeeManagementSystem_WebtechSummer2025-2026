@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promote Employee - WorkNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="hr_dashboard.css">
+    <link rel="stylesheet" href="hr_promote.css">
+</head>
+<body>
+    <nav class="hrSidebar">
+        <div class="hrSidebar_header">
+            <div class="hrSidebar_brandMark">W</div>
+            <div class="hrSidebar_brandText">
+                <span class="hrSidebar_logo">WorkNest</span>
+                <span class="hrSidebar_role">HR Panel</span>
+            </div>
+        </div>
+        <ul class="hrSidebar_nav">
+            <li class="hrSidebar_navItem"><a href="hr_dashboard.html" class="hrSidebar_navLink">Dashboard</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_update_employee.html" class="hrSidebar_navLink">Update Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_recruit.html" class="hrSidebar_navLink">Recruit Employee</a></li>
+            <li class="hrSidebar_navItem active"><a href="hr_promote.html" class="hrSidebar_navLink">Promote Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_terminate.html" class="hrSidebar_navLink">Terminate Employee</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_leave_requests.html" class="hrSidebar_navLink">Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="../Login/login_index.html" class="hrSidebar_navLink logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="hrMain">
+        <header class="hrHeader">
+            <div class="hrHeader_content">
+                <h1 class="hrHeader_title">Promote Employee</h1>
+                <p class="hrHeader_subtitle">Review and process promotion requests</p>
+            </div>
+        </header>
+
+        <div class="hrPromote_container">
+            <div class="hrPromote_card">
+                <div class="hrPromote_cardTitle">
+                    <span>Promotion Requests</span>
+                    <span class="hrPromote_badge hrPromote_badge_pending" id="hrPromote_count">0 requests</span>
+                </div>
+                <div id="hrPromote_list"></div>
+            </div>
+
+            <div class="hrPromote_card">
+                <div class="hrPromote_cardTitle">
+                    <span>Promotion History</span>
+                    <span class="hrPromote_badge" id="hrHistory_count" style="background: #f5f6fa; color: #4b5164;">0 records</span>
+                </div>
+                <div id="hrHistory_list" style="max-height: 400px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="mock-data.js"></script>
+    <script src="hr_promote.js"></script>
+</body>
+</html>

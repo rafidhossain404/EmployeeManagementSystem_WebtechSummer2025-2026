@@ -1,0 +1,28 @@
+/* Styles specifically for the Promote Employee page */
+.hrPromote_container { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; }
+.hrPromote_card { background: #fff; border: 1px solid #e6e8f0; border-radius: 12px; padding: 20px 22px; }
+.hrPromote_cardTitle { font-size: 15px; font-weight: 600; color: #1b2030; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+.hrPromote_badge { font-size: 11px; padding: 4px 10px; border-radius: 999px; font-weight: 700; }
+.hrPromote_badge_pending { background: #fdf1e0; color: #c8790a; }
+.hrPromote_badge_processing { background: #eaf0ff; color: #2f5fed; }
+.hrPromote_badge_approved { background: #e8f9ef; color: #17a558; }
+.hrPromote_badge_rejected { background: #fbe7e6; color: #d9463f; }
+.hrPromote_item { padding: 14px 16px; border: 1px solid #e6e8f0; border-radius: 10px; margin-bottom: 12px; }
+.hrPromote_item:hover { background: #f5f6fa; }
+.hrPromote_itemHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.hrPromote_itemName { font-weight: 600; color: #1b2030; }
+.hrPromote_itemDetails { font-size: 12.5px; color: #8890a0; display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+.hrPromote_itemActions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.hrPromote_itemActions select, .hrPromote_itemActions input[type="number"] { padding: 8px 12px; border: 1px solid #e6e8f0; border-radius: 8px; font-size: 13px; outline: none; }
+.hrPromote_itemActions input[type="number"] { width: 100px; }
+.hrPromote_table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.hrPromote_table th { text-align: left; padding: 10px 8px; color: #8890a0; font-weight: 600; font-size: 11.5px; text-transform: uppercase; border-bottom: 1px solid #e6e8f0; }
+.hrPromote_table td { padding: 10px 8px; border-bottom: 1px solid #e6e8f0; color: #1b2030; }
+.hrPromote_empty { text-align: center; color: #8890a0; padding: 32px 0; }
+.hrPromote_filter { display: flex; gap: 12px; margin-bottom: 16px; }
+.hrPromote_filter select, .hrPromote_filter input { padding: 9px 12px; border: 1px solid #e6e8f0; border-radius: 8px; font-size: 13px; outline: none; }
+.hrPromote_filter input { flex: 1; }
+
+@media (max-width: 992px) {
+    .hrPromote_container { grid-template-columns: 1fr; }
+}

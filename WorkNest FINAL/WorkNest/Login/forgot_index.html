@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorkNest Forgot Password</title>
+<link rel="stylesheet" href="forgot_style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- ================= LEFT SIDE: same dark brand panel as the login page ================= -->
+  <div class="panel-left">
+    <div class="grid-bg"></div>
+
+    <div class="brand">
+      <div class="logo">
+        <img src="logo.png" alt="WorkNest logo">
+      </div>
+      <span class="brand-name">WorkNest</span>
+    </div>
+
+    <div class="left-content">
+      <div class="badge"><span class="dot"></span>Real-Time Workforce Analytics</div>
+      <h1>Manage your<br><span class="grad">people, smarter.</span></h1>
+      <p>WorkNest brings HR, managers, and employees into one unified workspace — simplifying workforce management, all in one place.</p>
+    </div>
+
+    <div></div>
+  </div>
+
+  <!-- ================= RIGHT SIDE: identity verification form ================= -->
+  <div class="panel-right">
+    <div class="form-container">
+      <a href="login_index.html" class="back-link">&#8249; Back to sign in</a>
+      <h2>Forgot password?</h2>
+      <p class="subtext">Verify your identity with the details below. If everything matches your account, you'll be able to set a new password.</p>
+
+      <!-- Shows an error message if the entered details don't match any account -->
+      <div class="msg" id="topMsg" style="display:none;"></div>
+
+      <!-- We ask for 4 pieces of info so we can confirm the user is who they say they are
+           (this replaces sending a real reset email/SMS since there is no backend server) -->
+      <form id="forgotForm" novalidate>
+        <div class="field">
+          <label for="userId">USER ID</label>
+          <input type="text" id="userId" placeholder="EMP-001">
+          <div class="field-error" id="userIdError"></div>
+        </div>
+
+        <div class="field">
+          <label for="fullName">FULL NAME</label>
+          <input type="text" id="fullName" placeholder="FULL NAME">
+          <div class="field-error" id="fullNameError"></div>
+        </div>
+
+        <div class="field">
+          <label for="email">EMAIL</label>
+          <input type="email" id="email" placeholder="name@worknest.com">
+          <div class="field-error" id="emailError"></div>
+        </div>
+
+        <div class="field">
+          <label for="phone">PHONE NUMBER</label>
+          <input type="tel" id="phone" placeholder="+880 1xxxxxxxxx">
+          <div class="field-error" id="phoneError"></div>
+        </div>
+
+        <button type="submit" class="btn">Verify identity</button>
+      </form>
+
+      <p class="footer-text">Remember your password? <a href="login_index.html">Sign in</a></p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Handles checking the details above and sending the user to the reset page -->
+<script src="forgot_script.js"></script>
+</body>
+</html>
