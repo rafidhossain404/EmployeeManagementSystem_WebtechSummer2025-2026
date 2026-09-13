@@ -1,7 +1,6 @@
 <?php
 require_once 'hr_config.php';
 
-// Explicitly define session variables
 $hr_first_name = $_SESSION['first_name'] ?? 'HR';
 $hr_last_name = $_SESSION['last_name'] ?? 'User';
 
@@ -57,6 +56,7 @@ $employees = getAllActiveEmployees($conn);
             <li class="hrSidebar_navItem"><a href="hr_promote.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">⬆️</span>Promote Employee</a></li>
             <li class="hrSidebar_navItem active"><a href="hr_terminate.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">🚫</span>Terminate Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_leave_requests.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📋</span>Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_profile.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">👤</span>My Profile</a></li>
             <li class="hrSidebar_navItem"><a href="../logout.php" class="hrSidebar_navLink logout"><span class="hrSidebar_icon">🚪</span>Logout</a></li>
         </ul>
     </nav>

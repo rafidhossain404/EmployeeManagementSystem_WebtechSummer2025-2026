@@ -1,7 +1,6 @@
 <?php
 require_once 'hr_config.php';
 
-// Explicitly define session variables
 $hr_first_name = $_SESSION['first_name'] ?? 'HR';
 $hr_last_name = $_SESSION['last_name'] ?? 'User';
 
@@ -11,12 +10,10 @@ $messageType = '';
 $employeeData = null;
 $employeeId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// If employee ID is provided, fetch the employee data
 if ($employeeId > 0) {
     $employeeData = getEmployeeById($conn, $employeeId);
 }
 
-// Handle update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hr_update'])) {
     $employeeId = (int)$_POST['hr_employeeId'];
     $firstName = sanitizeInput($_POST['hr_firstName'] ?? '');
@@ -61,10 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hr_update'])) {
     }
 }
 
-// Get managers for dropdown
 $managers = getAllManagers($conn);
 
-// Get all employees for dropdown (Excludes HR and any Manager role)
 $employees = [];
 $sql = "SELECT e.EmployeeID, u.FirstName, u.LastName, u.Role, u.Status 
         FROM Employee e 
@@ -101,6 +96,7 @@ if (mysqli_num_rows($result) > 0) {
             <li class="hrSidebar_navItem"><a href="hr_promote.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">⬆️</span>Promote Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_terminate.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">🚫</span>Terminate Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_leave_requests.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📋</span>Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_profile.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">👤</span>My Profile</a></li>
             <li class="hrSidebar_navItem"><a href="../logout.php" class="hrSidebar_navLink logout"><span class="hrSidebar_icon">🚪</span>Logout</a></li>
         </ul>
     </nav>

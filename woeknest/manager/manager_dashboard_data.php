@@ -1,6 +1,6 @@
 <?php
 require_once 'manager_config.php';
-
+$conn = getDBConnection();
 header('Content-Type: application/json');
 
 // Handle task list request

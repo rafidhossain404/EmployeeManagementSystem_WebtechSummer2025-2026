@@ -1,7 +1,6 @@
 <?php
 require_once 'hr_config.php';
 
-// Explicitly define session variables
 $hr_first_name = $_SESSION['first_name'] ?? 'HR';
 $hr_last_name = $_SESSION['last_name'] ?? 'User';
 
@@ -12,7 +11,6 @@ $pendingPromotions = [];
 $promotionHistory = [];
 $current_user_role = $_SESSION['user_role'] ?? '';
 
-// Handle promotion action
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $promotionId = isset($_POST['hr_promotionId']) ? (int)$_POST['hr_promotionId'] : 0;
     $action = isset($_POST['hr_action']) ? sanitizeInput($_POST['hr_action']) : '';
@@ -99,14 +97,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// GET REQUESTS BASED ON ROLE
 if ($current_user_role === 'Manager') {
     $pendingPromotions = getPromotionsByStatus($conn, 'Pending');
 } else {
     $pendingPromotions = getPromotionsByStatus($conn, 'Processing');
 }
 
-// GET HISTORY (HR only)
 if ($current_user_role === 'HR') {
     $sql = "SELECT p.*, u.FirstName, u.LastName, u.Role as CurrentRole, u.Dept, u.Salary
             FROM Promotion p 
@@ -165,6 +161,7 @@ $availableRoles = [
             <li class="hrSidebar_navItem active"><a href="hr_promote.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">⬆️</span>Promote Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_terminate.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">🚫</span>Terminate Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_leave_requests.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📋</span>Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_profile.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">👤</span>My Profile</a></li>
             <li class="hrSidebar_navItem"><a href="../logout.php" class="hrSidebar_navLink logout"><span class="hrSidebar_icon">🚪</span>Logout</a></li>
         </ul>
     </nav>
@@ -205,7 +202,6 @@ $availableRoles = [
                             <form method="POST" action="">
                                 <input type="hidden" name="hr_promotionId" value="<?php echo $promoID; ?>">
                                 
-                                <!-- PHASE 1: Initial Buttons -->
                                 <div id="hrPhase1_<?php echo $promoID; ?>" class="hrPromote_itemActions">
                                     <?php if ($current_user_role === 'Manager'): ?>
                                         <button type="submit" name="hr_action" value="Processing" class="hrAction_btn hrAction_btn_processing">✅ Move to Processing</button>
@@ -215,7 +211,6 @@ $availableRoles = [
                                     <?php endif; ?>
                                 </div>
 
-                                <!-- PHASE 2: Form Only appears after clicking Approve (Hidden by default) -->
                                 <?php if ($current_user_role === 'HR'): ?>
                                 <div id="hrPhase2_<?php echo $promoID; ?>" class="hrPromote_itemActions" style="display: none;">
                                     <label style="font-size: 13px; color: #475569; font-weight: 500;">New Role:</label>

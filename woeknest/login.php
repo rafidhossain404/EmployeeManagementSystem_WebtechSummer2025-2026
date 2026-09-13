@@ -3,13 +3,15 @@ session_start();
 require_once './includes/db_connection.php';
 require_once './includes/functions.php';
 
-// Get database connection
 $conn = getDBConnection();
+$error = '';
+$showForgotLink = false;
+$recoveryUser = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = sanitizeInput($_POST['username'] ?? '');
     $password = sanitizeInput($_POST['password'] ?? '');
-    
+
     if (empty($username) || empty($password)) {
         $error = "Please enter username and password";
     } else {
@@ -18,33 +20,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, "s", $username);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
-        
+
         if ($user = mysqli_fetch_assoc($result)) {
             if ($password === $user['Password']) {
-                $_SESSION['user_name'] = $user['UserName'];
-                $_SESSION['user_role'] = $user['Role'];
+           
+                $_SESSION['user_name']  = $user['UserName'];
+                $_SESSION['user_role']  = $user['Role'];
                 $_SESSION['first_name'] = $user['FirstName'] ?? 'User';
-                $_SESSION['last_name'] = $user['LastName'] ?? '';
-                
+                $_SESSION['last_name']  = $user['LastName'] ?? '';
+
+                unset($_SESSION['recovery_user']);
+                unset($_SESSION['reset_user']);
+
                 if ($user['Role'] === 'HR') {
                     header("Location: hr/hr_dashboard.php");
+                    exit();
                 } elseif (strpos($user['Role'], 'Manager') !== false) {
                     header("Location: manager/manager_dashboard.php");
                     exit();
                 } else {
-                    header("Location: employee/employee_dashboard.html");
+                    header("Location: employee/employee_dashboard.php");
+                    exit();
                 }
-                exit();
             } else {
-                $error = "Invalid username or password";
+                
+                $error = "Invalid password.";
+                $showForgotLink = true;
+                $recoveryUser = $user['UserName'];
             }
         } else {
-            $error = "Invalid username or password";
+           
+            $error = "User not found.";
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,11 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - WorkNest</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
@@ -96,9 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 20px;
             font-size: 14px;
         }
-        .loginGroup {
-            margin-bottom: 20px;
-        }
+        .loginGroup { margin-bottom: 20px; }
         .loginLabel {
             display: block;
             font-size: 13px;
@@ -119,6 +123,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
+        .loginForgot {
+            text-align: right;
+            margin-top: -12px;
+            margin-bottom: 20px;
+        }
+        .loginForgot a {
+            color: #667eea;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .loginForgot a:hover { text-decoration: underline; }
         .loginBtn {
             width: 100%;
             padding: 14px;
@@ -130,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 8px;
         }
         .loginBtn:hover {
             transform: translateY(-2px);
@@ -143,32 +160,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 13px;
             color: #64748b;
         }
-        .loginDemo strong {
-            color: #1a1a2e;
-        }
+        .loginDemo strong { color: #1a1a2e; }
     </style>
 </head>
 <body>
     <div class="loginContainer">
         <h1 class="loginLogo">WorkNest</h1>
         <p class="loginSubtitle">Real-Time Workforce Analytics & Management</p>
-        
-        <?php if (isset($error)): ?>
-            <div class="loginError"><?php echo $error; ?></div>
+
+        <?php if (!empty($error)): ?>
+            <div class="loginError"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-        
+
         <form method="POST" action="">
             <div class="loginGroup">
                 <label class="loginLabel">Username</label>
-                <input type="text" name="username" class="loginInput" placeholder="Enter your username" required>
+                <input type="text" name="username" class="loginInput" placeholder="Enter your username" value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>" required>
             </div>
             <div class="loginGroup">
                 <label class="loginLabel">Password</label>
                 <input type="password" name="password" class="loginInput" placeholder="Enter your password" required>
             </div>
+
+            <?php if ($showForgotLink): ?>
+                <div class="loginForgot">
+                    <a href="forgot_password.php?user=<?php echo urlencode($recoveryUser); ?>">Forgot Password?</a>
+                </div>
+            <?php endif; ?>
+
             <button type="submit" class="loginBtn">Sign In</button>
         </form>
-        
+
         <div class="loginDemo">
             <strong>Demo Credentials:</strong><br>
             HR: hira_islam / 12345<br>

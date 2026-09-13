@@ -5,7 +5,6 @@ $message = '';
 $messageType = '';
 $assignedTasks = [];
 
-// Get employees under this manager
 $employees = [];
 $sql = "SELECT e.EmployeeID, u.FirstName, u.LastName, u.UserName 
         FROM Employee e 
@@ -20,7 +19,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     $employees[] = $row;
 }
 
-// Handle task assignment
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employeeId = isset($_POST['mgr_employeeId']) ? (int)$_POST['mgr_employeeId'] : 0;
     $title = sanitizeInput($_POST['mgr_title'] ?? '');
@@ -31,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "All fields are required!";
         $messageType = "error";
     } else {
-        // Verify employee belongs to this manager
         $sql = "SELECT EmployeeID FROM Employee WHERE EmployeeID = ? AND ManagerID = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "ii", $employeeId, $mgr_manager_id);
@@ -62,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get all tasks assigned by this manager
 $sql = "SELECT t.*, u.FirstName, u.LastName 
         FROM Task t 
         JOIN Employee e ON t.EmployeeID = e.EmployeeID 
@@ -88,7 +84,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="manager_assign_task.css">
 </head>
 <body>
-    <!-- Sidebar -->
     <nav class="mgrSidebar">
         <div class="mgrSidebar_header">
             <h1 class="mgrSidebar_logo">WorkNest</h1>
@@ -121,6 +116,11 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
+                <a href="manager_profile.php" class="mgrSidebar_navLink">
+                    <span class="mgrSidebar_icon">👤</span> My Profile
+                </a>
+            </li>
+            <li class="mgrSidebar_navItem">
                 <a href="../logout.php" class="mgrSidebar_navLink logout">
                     <span class="mgrSidebar_icon">🚪</span> Logout
                 </a>
@@ -128,7 +128,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="mgrMain">
         <header class="mgrHeader">
             <div class="mgrHeader_content">
@@ -137,7 +136,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </header>
 
-        <!-- Assignment Form -->
         <div class="mgrForm_card">
             <h2 class="mgrForm_title">📝 New Task Assignment</h2>
             
@@ -181,7 +179,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             </form>
         </div>
 
-        <!-- Assigned Tasks Table -->
         <div class="mgrTasks_container">
             <h2 class="mgrTasks_title">📋 Assigned Tasks</h2>
             <div class="mgrTasks_tableContainer">

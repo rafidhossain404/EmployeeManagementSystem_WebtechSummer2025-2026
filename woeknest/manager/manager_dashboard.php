@@ -1,8 +1,9 @@
 <?php
 require_once 'manager_config.php';
-?>
-<?php
-$conn = getDBConnection();
+
+// Use session variables (already defined in manager_config.php)
+$mgr_first_name = $_SESSION['first_name'] ?? 'Manager';
+$mgr_last_name = $_SESSION['last_name'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,40 +23,39 @@ $conn = getDBConnection();
         </div>
         
         <ul class="mgrSidebar_nav">
-            <li class="mgrSidebar_navItem active">
+            <li class="mgrSidebar_navItem">
                 <a href="manager_dashboard.php" class="mgrSidebar_navLink">
-                    <span class="mgrSidebar_icon">📊</span>
-                    Dashboard
+                    <span class="mgrSidebar_icon">📊</span> Dashboard
                 </a>
             </li>
-            <li class="mgrSidebar_navItem">
+            <li class="mgrSidebar_navItem active">
                 <a href="manager_leave_requests.php" class="mgrSidebar_navLink">
-                    <span class="mgrSidebar_icon">📋</span>
-                    Leave Requests
+                    <span class="mgrSidebar_icon">📋</span> Leave Requests
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
                 <a href="manager_promotions.php" class="mgrSidebar_navLink">
-                    <span class="mgrSidebar_icon">⬆️</span>
-                    Promotion Requests
+                    <span class="mgrSidebar_icon">⬆️</span> Promotion Requests
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
                 <a href="manager_assign_task.php" class="mgrSidebar_navLink">
-                    <span class="mgrSidebar_icon">📝</span>
-                    Assign Task
+                    <span class="mgrSidebar_icon">📝</span> Assign Task
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
                 <a href="manager_apply_leave.php" class="mgrSidebar_navLink">
-                    <span class="mgrSidebar_icon">🏖️</span>
-                    Apply Leave
+                    <span class="mgrSidebar_icon">🏖️</span> Apply Leave
+                </a>
+            </li>
+            <li class="mgrSidebar_navItem">
+                <a href="manager_profile.php" class="mgrSidebar_navLink">
+                    <span class="mgrSidebar_icon">👤</span> My Profile
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
                 <a href="../logout.php" class="mgrSidebar_navLink logout">
-                    <span class="mgrSidebar_icon">🚪</span>
-                    Logout
+                    <span class="mgrSidebar_icon">🚪</span> Logout
                 </a>
             </li>
         </ul>
@@ -67,11 +67,11 @@ $conn = getDBConnection();
         <header class="mgrHeader">
             <div class="mgrHeader_content">
                 <h1 class="mgrHeader_title">Dashboard</h1>
-                <p class="mgrHeader_subtitle">Welcome back, <span id="mgrName_display"><?php echo $mgr_first_name . ' ' . $mgr_last_name; ?></span></p>
+                <p class="mgrHeader_subtitle">Welcome back, <span id="mgrName_display"><?php echo htmlspecialchars($mgr_first_name . ' ' . $mgr_last_name); ?></span></p>
             </div>
             <div class="mgrHeader_actions">
                 <div class="mgrHeader_profile">
-                    <span class="mgrHeader_profileName"><?php echo substr($mgr_first_name, 0, 1) . substr($mgr_last_name, 0, 1); ?></span>
+                    <span class="mgrHeader_profileName"><?php echo htmlspecialchars(strtoupper(substr($mgr_first_name, 0, 1) . substr($mgr_last_name, 0, 1))); ?></span>
                 </div>
             </div>
         </header>

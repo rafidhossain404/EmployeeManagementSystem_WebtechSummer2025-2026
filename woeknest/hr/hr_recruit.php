@@ -4,7 +4,6 @@ $conn = getDBConnection();
 $message = '';
 $messageType = '';
 
-// Get managers for dropdown
 $managers = [];
 $sql = "SELECT m.ManagerID, u.UserName, u.FirstName, u.LastName 
         FROM Manager m 
@@ -18,7 +17,6 @@ if (mysqli_num_rows($result) > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data
     $userName = sanitizeInput($_POST['hr_userName'] ?? '');
     $password = sanitizeInput($_POST['hr_password'] ?? '');
     $firstName = sanitizeInput($_POST['hr_firstName'] ?? '');
@@ -34,14 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $joinDate = sanitizeInput($_POST['hr_joinDate'] ?? date('Y-m-d'));
     $managerId = !empty($_POST['hr_managerId']) ? (int)$_POST['hr_managerId'] : null;
 
-    // Validate required fields
     if (empty($userName) || empty($password) || empty($firstName) || empty($lastName) || 
         empty($dob) || empty($gender) || empty($email) || empty($phone) || 
         empty($address) || empty($role) || empty($dept) || empty($salary)) {
         $message = "All fields are required!";
         $messageType = "error";
     } else {
-        // Check if username already exists
         $checkSql = "SELECT UserName FROM User WHERE UserName = ?";
         $checkStmt = mysqli_prepare($conn, $checkSql);
         mysqli_stmt_bind_param($checkStmt, "s", $userName);
@@ -52,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Username already exists!";
             $messageType = "error";
         } else {
-            // Check if email already exists
             $checkSql = "SELECT Email FROM User WHERE Email = ?";
             $checkStmt = mysqli_prepare($conn, $checkSql);
             mysqli_stmt_bind_param($checkStmt, "s", $email);
@@ -63,11 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = "Email already exists!";
                 $messageType = "error";
             } else {
-                // Start transaction
                 mysqli_begin_transaction($conn);
                 
                 try {
-                    // Insert into User table
                     $sql = "INSERT INTO User (UserName, Password, Role, Dept, Salary, FirstName, LastName, DOB, Gender, Email, Phone, Address, JoinDate, Status) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')";
                     $stmt = mysqli_prepare($conn, $sql);
@@ -77,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         throw new Exception("Error inserting user: " . mysqli_error($conn));
                     }
                     
-                    // Insert into Employee table
                     $sql = "INSERT INTO Employee (UserName, ManagerID) VALUES (?, ?)";
                     $stmt = mysqli_prepare($conn, $sql);
                     mysqli_stmt_bind_param($stmt, "si", $userName, $managerId);
@@ -89,8 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mysqli_commit($conn);
                     $message = "Employee recruited successfully!";
                     $messageType = "success";
-                    
-                    // Clear form data
                     $_POST = [];
                 } catch (Exception $e) {
                     mysqli_rollback($conn);
@@ -134,10 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          <ul class="hrSidebar_nav">
             <li class="hrSidebar_navItem"><a href="hr_dashboard.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📊</span>Dashboard</a></li>
             <li class="hrSidebar_navItem"><a href="hr_update_employee.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">✏️</span>Update Employee</a></li>
-            <li class="hrSidebar_navItem"><a href="hr_recruit.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">➕</span>Recruit Employee</a></li>
+            <li class="hrSidebar_navItem active"><a href="hr_recruit.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">➕</span>Recruit Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_promote.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">⬆️</span>Promote Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_terminate.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">🚫</span>Terminate Employee</a></li>
             <li class="hrSidebar_navItem"><a href="hr_leave_requests.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">📋</span>Leave Requests</a></li>
+            <li class="hrSidebar_navItem"><a href="hr_profile.php" class="hrSidebar_navLink"><span class="hrSidebar_icon">👤</span>My Profile</a></li>
             <li class="hrSidebar_navItem"><a href="../logout.php" class="hrSidebar_navLink logout"><span class="hrSidebar_icon">🚪</span>Logout</a></li>
         </ul>
     </nav>

@@ -5,13 +5,11 @@ $message = '';
 $messageType = '';
 $leaveHistory = [];
 
-// Handle leave application
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sd = sanitizeInput($_POST['mgr_sd'] ?? '');
     $ed = sanitizeInput($_POST['mgr_ed'] ?? '');
     $reason = sanitizeInput($_POST['mgr_reason'] ?? '');
 
-    // Validation
     if (empty($sd) || empty($ed) || empty($reason)) {
         $message = "All fields are required!";
         $messageType = "error";
@@ -21,24 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $edDate = new DateTime($ed);
         $diff = $sdDate->diff($edDate)->days;
 
-        // Validate start date not in past
         if ($sd < $today) {
             $message = "Start date cannot be in the past!";
             $messageType = "error";
-        }
-        // Validate end date >= start date
-        elseif ($ed < $sd) {
+        } elseif ($ed < $sd) {
             $message = "End date must be after start date!";
             $messageType = "error";
-        }
-        // Validate max duration 7 days
-        elseif ($diff > 7) {
+        } elseif ($diff > 7) {
             $message = "Leave duration cannot exceed 7 days!";
             $messageType = "error";
-        }
-        // Check if manager is already on leave
-        else {
-            // Check user status
+        } else {
             $sql = "SELECT Status FROM User WHERE UserName = ?";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "s", $mgr_user_name);
@@ -50,8 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = "You are already on leave!";
                 $messageType = "error";
             } else {
-                // Check if there's an active leave request
-                $sql = "SELECT LeaveID FROM Leave WHERE UserName = ? AND Status IN ('Pending', 'Processing')";
+                $sql = "SELECT LeaveID FROM `Leave` WHERE UserName = ? AND Status IN ('Pending', 'Processing')";
                 $stmt = mysqli_prepare($conn, $sql);
                 mysqli_stmt_bind_param($stmt, "s", $mgr_user_name);
                 mysqli_stmt_execute($stmt);
@@ -61,9 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $message = "You already have an active leave request!";
                     $messageType = "error";
                 } else {
-                    // Insert leave with Status = 'Processing' (Manager bypasses manager review)
                     $status = 'Processing';
-                $sql = "INSERT INTO `Leave` (UserName, SD, ED, Reason, Status) VALUES (?, ?, ?, ?, ?)";
+                    $sql = "INSERT INTO `Leave` (UserName, SD, ED, Reason, Status) VALUES (?, ?, ?, ?, ?)";
                     $stmt = mysqli_prepare($conn, $sql);
                     mysqli_stmt_bind_param($stmt, "sssss", $mgr_user_name, $sd, $ed, $reason, $status);
                     
@@ -81,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get leave history for this manager
 $sql = "SELECT * FROM `Leave` WHERE UserName = ? ORDER BY SD DESC";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "s", $mgr_user_name);
@@ -102,7 +89,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="manager_apply_leave.css">
 </head>
 <body>
-    <!-- Sidebar -->
     <nav class="mgrSidebar">
         <div class="mgrSidebar_header">
             <h1 class="mgrSidebar_logo">WorkNest</h1>
@@ -135,6 +121,11 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
+                <a href="manager_profile.php" class="mgrSidebar_navLink">
+                    <span class="mgrSidebar_icon">👤</span> My Profile
+                </a>
+            </li>
+            <li class="mgrSidebar_navItem">
                 <a href="../logout.php" class="mgrSidebar_navLink logout">
                     <span class="mgrSidebar_icon">🚪</span> Logout
                 </a>
@@ -142,7 +133,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="mgrMain">
         <header class="mgrHeader">
             <div class="mgrHeader_content">
@@ -151,7 +141,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </header>
 
-        <!-- Application Form -->
         <div class="mgrForm_card">
             <h2 class="mgrForm_title">🏖️ New Leave Application</h2>
             
@@ -188,7 +177,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             </form>
         </div>
 
-        <!-- Leave History -->
         <div class="mgrHistory_container">
             <h2 class="mgrHistory_title">📋 Your Leave History</h2>
             <div class="mgrHistory_tableContainer">

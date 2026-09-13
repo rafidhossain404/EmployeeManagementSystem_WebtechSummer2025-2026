@@ -1,11 +1,9 @@
 <?php
 require_once 'manager_config.php';
 $conn = getDBConnection();
-// Handle status filter
 $statusFilter = isset($_GET['status']) ? sanitizeInput($_GET['status']) : 'all';
 $searchTerm = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
 
-// Get pending leave requests from subordinates
 $sql = "SELECT l.*, u.FirstName, u.LastName, u.Dept 
         FROM `Leave` l 
         JOIN Employee e ON l.UserName = e.UserName 
@@ -47,67 +45,18 @@ while ($row = mysqli_fetch_assoc($result)) {
     <title>Leave Requests - WorkNest</title>
     <link rel="stylesheet" href="manager_dashboard.css">
     <style>
-        .mgrPage_filter {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .mgrPage_filter select,
-        .mgrPage_filter input {
-            padding: 10px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .mgrPage_filter input {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .mgrPage_table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        
-        .mgrPage_table th {
-            text-align: left;
-            padding: 14px 12px;
-            background: #f8fafc;
-            color: #475569;
-            font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .mgrPage_table td {
-            padding: 12px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        
-        .mgrPage_table tr:hover td {
-            background: #f8fafc;
-        }
-        
-        .mgrPage_tableContainer {
-            background: #fff;
-            border-radius: 16px;
-            padding: 20px 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            overflow-x: auto;
-        }
-        
-        .mgrPage_empty {
-            text-align: center;
-            color: #94a3b8;
-            padding: 30px 0;
-        }
+        .mgrPage_filter { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .mgrPage_filter select, .mgrPage_filter input { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .mgrPage_filter input { flex: 1; min-width: 200px; }
+        .mgrPage_table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .mgrPage_table th { text-align: left; padding: 14px 12px; background: #f8fafc; color: #475569; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+        .mgrPage_table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        .mgrPage_table tr:hover td { background: #f8fafc; }
+        .mgrPage_tableContainer { background: #fff; border-radius: 16px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow-x: auto; }
+        .mgrPage_empty { text-align: center; color: #94a3b8; padding: 30px 0; }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <nav class="mgrSidebar">
         <div class="mgrSidebar_header">
             <h1 class="mgrSidebar_logo">WorkNest</h1>
@@ -140,6 +89,11 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </a>
             </li>
             <li class="mgrSidebar_navItem">
+                <a href="manager_profile.php" class="mgrSidebar_navLink">
+                    <span class="mgrSidebar_icon">👤</span> My Profile
+                </a>
+            </li>
+            <li class="mgrSidebar_navItem">
                 <a href="../logout.php" class="mgrSidebar_navLink logout">
                     <span class="mgrSidebar_icon">🚪</span> Logout
                 </a>
@@ -147,7 +101,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         </ul>
     </nav>
 
-    <!-- Main Content -->
     <main class="mgrMain">
         <header class="mgrHeader">
             <div class="mgrHeader_content">
@@ -254,7 +207,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             window.location.href = window.location.pathname;
         }
 
-        // Allow Enter key for search
         document.getElementById('mgrSearch_input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') applyFilters();
         });
