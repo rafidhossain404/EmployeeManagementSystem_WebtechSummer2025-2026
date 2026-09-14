@@ -22,8 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = mysqli_stmt_get_result($stmt);
 
         if ($user = mysqli_fetch_assoc($result)) {
-            if ($password === $user['Password']) {
-           
+            if ($user['Status'] === 'Inactive') {
+                // Blocked — deactivated account
+                $error = "Your account has been deactivated. Please contact HR.";
+            } elseif ($password === $user['Password']) {
+                // Successful login
                 $_SESSION['user_name']  = $user['UserName'];
                 $_SESSION['user_role']  = $user['Role'];
                 $_SESSION['first_name'] = $user['FirstName'] ?? 'User';
@@ -43,13 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit();
                 }
             } else {
-                
+                // Valid username, wrong password
                 $error = "Invalid password.";
                 $showForgotLink = true;
                 $recoveryUser = $user['UserName'];
             }
         } else {
-           
+            // Username does not exist
             $error = "User not found.";
         }
     }

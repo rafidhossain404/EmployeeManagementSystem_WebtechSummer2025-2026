@@ -179,11 +179,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" action="">
             <div class="forgotGroup">
                 <label class="forgotLabel">Email Address</label>
-                <input type="email" name="email" class="forgotInput" placeholder="your.email@worknest.com" required>
+                <input type="email" name="email" class="forgotInput"  required>
             </div>
             <div class="forgotGroup">
                 <label class="forgotLabel">Phone Number</label>
-                <input type="text" name="phone" class="forgotInput" placeholder="01712345678" required>
+                <input type="text" name="phone" class="forgotInput" required>
             </div>
             <button type="submit" class="forgotBtn">Verify &amp; Continue</button>
         </form>

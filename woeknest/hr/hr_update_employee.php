@@ -115,7 +115,7 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="hrUpdate_sectionTitle">📋 Select Employee to Edit</div>
                     <form method="GET" action="">
                         <select name="id" class="hrUpdate_selectEmployee" onchange="this.form.submit()">
-                            <option value="">-- Select an employee --</option>
+                            <option value=""> Select an employee </option>
                             <?php foreach ($employees as $emp): ?>
                                 <option value="<?php echo $emp['EmployeeID']; ?>">
                                     <?php echo $emp['FirstName'] . ' ' . $emp['LastName'] . ' (' . $emp['Role'] . ') - ' . $emp['Status']; ?>
